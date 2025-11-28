@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" class="img-fluid rounded mb-4 w-100" style="max-height:500px; object-fit:cover;" alt="{{ post.title }}">
+            {% endif %}
+            
+            <h1 class="display-5 fw-bold mb-3">{{ post.title }}</h1>
+            
+            <div class="text-muted mb-4">
+                <i class="far fa-calendar"></i> {{ post.created_at|date:"F d, Y" }}
+                • {{ post.views }} views
+                • {{ post.comment_count }} comments
+                • By {{ post.author.username }}
+            </div>
+            
+            <div class="blog-content lead">
+                {{ post.content|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

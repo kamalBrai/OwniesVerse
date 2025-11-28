@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us | OwniesVerse{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Get in Touch with   <span style="color:#0d1b2a;">Ownies</span><span style="color:#00d4ff;">Verse</span>
+                </h1>
+                <p class="lead fs-4 text-muted mb-4">
+                    Have a question? Need help with an order? We're here 24/7 to make you smile.
+                </p>
+                <div class="d-flex flex-column gap-3 fs-5">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-envelope text-ownies me-3"></i>
+                        <strong>support@owniesverse2024.com</strong>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-phone text-ownies me-3"></i>
+                        <strong>+977 9803162936</strong>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock text-ownies me-3"></i>
+                        <strong>Response within 1 hour (9 AM – 11 PM PKT)</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="{% static 'images/contact-hero.jpg' %}" 
+                     class="img-fluid w-100 rounded-3 shadow-lg" 
+                     style="height: 520px; object-fit: cover; object-position: center;"
+                     alt="Contact E-SHOPPER">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-5 fw-bold">Send Us a Message</h2>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Full Name</label>
+                                    <input type="text" name="name" class="form-control form-control-lg" required placeholder="John Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Email Address</label>
+                                    <input type="email" name="email" class="form-control form-control-lg" required placeholder="john@example.com">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Subject</label>
+                                    <select name="subject" class="form-select form-select-lg" required>
+                                        <option value="">Choose...</option>
+                                        <option>Order Inquiry</option>
+                                        <option>Return & Exchange</option>
+                                        <option>Size & Fit Help</option>
+                                        <option>Product Question</option>
+                                        <option>Partnership</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Message</label>
+                                    <textarea name="message" rows="6" class="form-control form-control-lg" 
+                                              placeholder="How can we help you today?" required></textarea>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-gradient btn-lg px-5 mt-3">
+                                        Send Message <i class="fas fa-paper-plane ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Quick Links -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Frequently Asked Questions</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <i class="fas fa-shipping-fast fs-1 text-ownies mb-3"></i>
+                    <h5>Shipping Info</h5>
+                    <p class="text-muted small">Free shipping over $50 • 3–7 days delivery</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <i class="fas fa-undo fs-1 text-ownies mb-3"></i>
+                    <h5>Returns</h5>
+                    <p class="text-muted small">30-day free returns • Full refund</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Return Policy</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                    <i class="fas fa-ruler fs-1 text-ownies mb-3"></i>
+                    <h5>Size Guide</h5>
+                    <p class="text-muted small">Detailed charts for all products</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">View Guide</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section — EXACT SAME AS BLOG & ABOUT US -->
+<section class="newsletter-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center">
+                <h3 class="mb-3">Subscribe to Our Newsletter</h3>
+                <p class="text-muted mb-4">
+                    Get the latest blog posts, exclusive offers, and style tips delivered straight to your inbox
+                </p>
+                <form class="d-flex gap-2 justify-content-center">
+                    <input type="email" class="form-control" placeholder="Enter your email"
+                           style="max-width: 350px; height: 50px;">
+                    <button class="btn btn-gradient" type="submit"
+                            style="min-width: 140px; height: 50px;">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

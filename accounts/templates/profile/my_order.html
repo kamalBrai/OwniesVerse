@@ -1,0 +1,71 @@
+{% extends 'profile_dashboard.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+{% block page_title %}Profile{% endblock %}
+{% block page_subtitle %}Manage your account information{% endblock %}
+
+{% block maincontent %}
+
+<h1 class="text-center alert alert-info">My Order List</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col alert alert-success">
+            <table class="table table-success table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">product</th>
+      <th scope="col">quantity</th>
+      <th scope="col">price</th>
+      <th scope="col">Total</th>
+    <th scope="col">image</th>
+      <th scope="col">Address</th>
+      <th scope="col">Phone</th>
+      <th scope="col">status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in myorder %}
+      
+   
+    <tr>
+      <th scope="row">{{order.id}}</th>
+      <td>{{order.product}}</td>
+      <td>{{order.quantity}}</td>
+      <td>{{order.price}}</td>
+      <td>{{order.total}}</td>
+      <td><img src="{{order.image}}" height="100px" width="100px" alt=""></td>
+      <td>{{order.address}}</td>
+      <td>{{order.phone}}</td>
+      <td>
+        {% if order.is_pay %}
+        <button class="btn btn-sm btn-success">Paid</button>
+
+        {% with order.transaction_set.first as txn %}
+        <div class="my-2 p-2 border bg-light rounded">
+            <strong>TXN Id</strong>{{txn.transaction_id}}
+            <strong>Amount</strong>{{txn.total}}
+            <strong>Payment date</strong>{{txn.payment_date}}
+        </div>
+          
+        {% endwith %}
+        {% else %}
+        <a href="{% url 'initkhalti' order.id %}">
+        <button class="btn btn-sm btn-warning" >Pay with khalti</button>
+          </a>
+        {% endif %}
+      </td>
+     
+    </tr>
+     {% endfor %}
+  
+  </tbody>
+</table>
+
+        </div>
+    </div>
+</div>
+
+{% endblock maincontent %}
