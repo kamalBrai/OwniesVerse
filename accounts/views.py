@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from datetime import datetime
 from .models import CustomUserModel
 import re
@@ -154,3 +154,18 @@ def my_order(request):
         'myorder' : myorder
     }
     return render(request, 'profile/my_order.html', context)
+
+
+@login_required
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # Only allow cancellation if order is not paid
+    if not order.is_pay:
+        order.delete()  # or order.status = 'cancelled' if you want to keep records
+        messages.success(request, 'Order cancelled successfully!')
+    else:
+        messages.error(request, 'Cannot cancel a paid order!')
+    
+    return redirect('my_order')
+

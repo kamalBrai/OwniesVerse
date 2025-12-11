@@ -3,123 +3,500 @@
 {% load cart_tag %}
 {% block content %}
 
+<style>
+    :root {
+        --primary-color: #0d1b2a;
+        --accent-color: #00d4ff;
+        --light-bg: #f8f9fa;
+        --border-color: #e0e0e0;
+    }
+
+    #cart_items {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .breadcrumbs {
+        margin-bottom: 30px;
+    }
+
+    .breadcrumb {
+        background: white;
+        padding: 15px 25px;
+        border-radius: 50px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb li {
+        display: inline;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .breadcrumb li a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .breadcrumb li a:hover {
+        color: var(--accent-color);
+    }
+
+    .breadcrumb li.active {
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+    .breadcrumb li + li:before {
+        content: "›";
+        padding: 0 10px;
+        color: #ccc;
+    }
+
+    .cart-header {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .cart-header h2 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .cart-header h2 .accent {
+        color: var(--accent-color);
+    }
+
+    .cart-container {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .cart-table-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
+        color: white;
+        padding: 20px 25px;
+        display: grid;
+        grid-template-columns: 100px 2fr 1fr 1.5fr 1fr 60px;
+        gap: 20px;
+        align-items: center;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 100px 2fr 1fr 1.5fr 1fr 60px;
+        gap: 20px;
+        align-items: center;
+        padding: 25px;
+        border-bottom: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .cart-item:hover {
+        background: #f8f9fa;
+        transform: translateX(5px);
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-product img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+    .cart-product img:hover {
+        transform: scale(1.05);
+    }
+
+    .cart-description h4 {
+        color: var(--primary-color);
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .cart-price p {
+        color: var(--accent-color);
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .cart_quantity_button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--light-bg);
+        padding: 8px 12px;
+        border-radius: 50px;
+        width: fit-content;
+    }
+
+    .cart_quantity_up,
+    .cart_quantity_down {
+        background: var(--accent-color);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(0,212,255,0.3);
+    }
+
+    .cart_quantity_up:hover,
+    .cart_quantity_down:hover {
+        background: var(--primary-color);
+        transform: scale(1.1);
+    }
+
+    .cart_quantity_input {
+        width: 50px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .cart-total p {
+        color: var(--primary-color);
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .cart_quantity_delete {
+        background: #ff4757;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(255,71,87,0.3);
+    }
+
+    .cart_quantity_delete:hover {
+        background: #ff3838;
+        transform: scale(1.1) rotate(90deg);
+    }
+
+    .cart-footer {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 30px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .total-section {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .total-label {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .total-amount {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--accent-color);
+        text-shadow: 2px 2px 4px rgba(0,212,255,0.2);
+    }
+
+    .btn-order-now {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #0099cc 100%);
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 8px 25px rgba(0,212,255,0.4);
+    }
+
+    .btn-order-now:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(0,212,255,0.5);
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .empty-cart i {
+        font-size: 100px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .empty-cart h3 {
+        color: var(--primary-color);
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        border-radius: 20px;
+        border: none;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
+        color: white;
+        padding: 25px 30px;
+        border: none;
+    }
+
+    .modal-title {
+        font-weight: 700;
+    }
+
+    .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .modal-body .form-label {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .modal-body .form-control {
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        padding: 12px 15px;
+        transition: all 0.3s;
+    }
+
+    .modal-body .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.2rem rgba(0,212,255,0.25);
+    }
+
+    .modal-footer {
+        padding: 20px 30px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .modal-footer .btn-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+    }
+
+    .modal-footer .btn-primary {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #0099cc 100%);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .cart-table-header,
+        .cart-item {
+            grid-template-columns: 80px 1.5fr 1fr 1.2fr 1fr 50px;
+            gap: 15px;
+            padding: 20px 15px;
+        }
+
+        .cart-product img {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cart-table-header {
+            display: none;
+        }
+
+        .cart-item {
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .cart_quantity_button {
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .cart-footer {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .total-section {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
 
 <section id="cart_items">
     <div class="container">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
                 <li class="active">Shopping Cart</li>
             </ol>
         </div>
-        <div class="table-responsive cart_info">
-            <table class="table table-condensed">
-                <thead>
-                    <tr class="cart_menu">
-                        <td class="image">Item</td>
-                        <td class="description"></td>
-                        <td class="price">Price</td>
-                        <td class="quantity">Quantity</td>
-                        <td class="total">Total</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for key,value in request.session.cart.items %}
-                    <tr>
-                        <td class="cart_product">
-                            <a href=""><img src="{{value.image}}" height="100px" width="100px" alt=""></a>
-                        </td>
-                        <td class="cart_description">
-                            <h4><a href="">{{value.name}}</a></h4>
-                            <!-- <p>Web ID: 1089772</p> -->
-                        </td>
-                        <td class="cart_price">
-                            <p>Rs.{{value.price}}</p>
-                        </td>
-                        <td class="cart_quantity">
-                            <div class="cart_quantity_button">
-                                <a class="cart_quantity_up" href="{% url 'item_increment' value.product_id %}"> + </a>
-                                <input class="cart_quantity_input" type="text" name="quantity"
-                                    value="{{value.quantity}}" autocomplete="off" size="2">
-                                {% if value.quantity > 1 %}
 
-                                <a class="cart_quantity_down" href="{% url 'item_decrement' value.product_id %}"> - </a>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td class="cart_total">
-                            <p class="cart_total_price">Rs.{{ value.price|multiply:value.quantity }}</p>
-                        </td>
-                        <td class="cart_delete">
-                            <a class="cart_quantity_delete" href="{% url 'item_clear' key %}"><i
-                                    class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-
-
-                </tbody>
-                <tfoot>
-                    <td></td>
-                    <td>
-                        <h4>Total Amount</h4>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <h4>Rs.{{cart_total_amount}}</h4>
-                    </td>
-                    <td></td>
-                </tfoot>
-            </table>
-            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">Order Now</button>
+        <div class="cart-header">
+            <h2><span class="accent">Your</span> Shopping Cart</h2>
         </div>
+
+        {% if request.session.cart %}
+        <div class="cart-container">
+            <div class="cart-table-header">
+                <div>Product</div>
+                <div>Details</div>
+                <div>Price</div>
+                <div>Quantity</div>
+                <div>Total</div>
+                <div></div>
+            </div>
+
+            {% for key,value in request.session.cart.items %}
+            <div class="cart-item">
+                <div class="cart-product">
+                    <a href=""><img src="{{value.image}}" alt="{{value.name}}"></a>
+                </div>
+                <div class="cart-description">
+                    <h4><a href="">{{value.name}}</a></h4>
+                </div>
+                <div class="cart-price">
+                    <p>Rs.{{value.price}}</p>
+                </div>
+                <div class="cart-quantity">
+                    <div class="cart_quantity_button">
+                        {% if value.quantity > 1 %}
+                        <a class="cart_quantity_down" href="{% url 'item_decrement' value.product_id %}">-</a>
+                        {% endif %}
+                        <input class="cart_quantity_input" type="text" name="quantity"
+                            value="{{value.quantity}}" autocomplete="off" size="2" readonly>
+                        <a class="cart_quantity_up" href="{% url 'item_increment' value.product_id %}">+</a>
+                    </div>
+                </div>
+                <div class="cart-total">
+                    <p class="cart_total_price">Rs.{{ value.price|multiply:value.quantity }}</p>
+                </div>
+                <div class="cart-delete">
+                    <a class="cart_quantity_delete" href="{% url 'item_clear' key %}"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="cart-footer">
+                <div class="total-section">
+                    <span class="total-label">Total Amount:</span>
+                    <span class="total-amount">Rs.{{cart_total_amount}}</span>
+                </div>
+                <button class="btn-order-now" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fas fa-shopping-bag"></i> Proceed to Checkout
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="cart-container">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Your cart is empty!</h3>
+                <p>Add some products to get started.</p>
+                <a href="{% url 'index' %}" class="btn-order-now" style="display: inline-block; margin-top: 20px; text-decoration: none;">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+        {% endif %}
     </div>
-</section> <!--/#cart_items-->
+</section>
 
-<!-- model -->
-
-
+<!-- Order Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Order Now</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    <i class="fas fa-shopping-bag me-2"></i>Complete Your Order
+                </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="post" action="{% url 'my_order' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Phone:</label>
-                        <input type="text" name="phone" class="form-control" id="recipient-name">
+            <form method="post" action="{% url 'my_order' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="recipient-name" class="form-label">
+                            <i class="fas fa-phone me-2"></i>Phone Number
+                        </label>
+                        <input type="text" name="phone" class="form-control" id="recipient-name" 
+                               placeholder="Enter your phone number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Address:</label>
-                        <textarea name="address" class="form-control" id="message-text"></textarea>
+                        <label for="message-text" class="form-label">
+                            <i class="fas fa-map-marker-alt me-2"></i>Delivery Address
+                        </label>
+                        <textarea name="address" class="form-control" id="message-text" rows="4"
+                                  placeholder="Enter your complete delivery address" required></textarea>
                     </div>
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Order Now</button>
-            </div>
-             </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-2"></i>Place Order
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<script>
-    const myModal = document.getElementById('myModal')
-    const myInput = document.getElementById('myInput')
-
-    myModal.addEventListener('shown.bs.modal', () => {
-        myInput.focus()
-    })
-</script>
-
-
-
 
 {% endblock content %}

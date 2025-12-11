@@ -6,6 +6,7 @@ from accounts.models import Order
 from payments.models import Transaction
 from django.http import JsonResponse
 from django.conf import settings
+from decouple import config
 
 import uuid
 
@@ -31,7 +32,7 @@ def initkhalti(request, id):
         }
     })
     headers = {
-        'Authorization': f"Key {settings.KHALTI_SECRET_KEY}",
+        'Authorization': config('KHALTI_SECRET_KEY'),
         'Content-Type': 'application/json',
     }
 
@@ -46,7 +47,7 @@ def verifyKhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/lookup/"
     if request.method == 'GET':
         headers = {
-            'Authorization': 'key e88c0fd1e5ef4097b4818b1350e4723b',
+            'Authorization': config('KHALTI_SECRET_KEY'),
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')

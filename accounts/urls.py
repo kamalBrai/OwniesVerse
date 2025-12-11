@@ -8,4 +8,5 @@ urlpatterns=[
   path("profile_dashboard/",profile_dashboard,name='profile_dashboard'),
   path("profile/",profile,name='profile'),
   path("my_order/",my_order,name='my_order'),
+  path('cancel-order/<int:order_id>/', cancel_order, name='cancel_order'),
 ]

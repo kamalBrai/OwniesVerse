@@ -299,7 +299,7 @@ def cart_clear(request):
 def cart_detail(request):
     return render(request, 'core/cart.html')
 
-
+# wishlist section
 @login_required
 def wishlist(request):
     """Display user's wishlist"""

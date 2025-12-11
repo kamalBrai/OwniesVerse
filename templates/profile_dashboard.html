@@ -23,7 +23,9 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="/static/assets/css/material-dashboard.css?v=3.1.0" rel="stylesheet" />
     
-    {% block css %}{% endblock css %}
+    {% block css %}
+    {% endblock css %}
+    
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -33,8 +35,8 @@
             <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="/">
-                <img src="{% static 'assets/img/logo-ct.png' %}" class="navbar-brand-img h-100" alt="main_logo">
-                <span class="ms-1 font-weight-bold text-white">MyShop</span>
+                <img src="{% static 'images/owniesVerseLogo.png' %}" class="navbar-brand-img h-100" alt="main_logo" style="background-color: white; padding: 5px; border-radius: 5px;">
+                <span class="ms-1 font-weight-bold text-white">OwniesVerse</span>
             </a>
         </div>
         <hr class="horizontal light mt-0 mb-2">
@@ -62,7 +64,7 @@
                 
                 <li class="nav-item">
                     <a class="nav-link text-white {% if 'orders' in request.path %}active bg-gradient-primary{% endif %}"
-                        href="">
+                        href="{% url 'my_order' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">shopping_cart</i>
                         </div>
@@ -70,15 +72,15 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link text-white {% if 'wishlist' in request.path %}active bg-gradient-primary{% endif %}"
-                        href="">
+                        href="{% url 'wishlist' %}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">favorite</i>
                         </div>
                         <span class="nav-link-text ms-1">Wishlist</span>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account</h6>
@@ -119,10 +121,10 @@
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                        <div class="input-group input-group-outline">
+                        <!-- <div class="input-group input-group-outline">
                             <label class="form-label">Search...</label>
                             <input type="text" class="form-control">
-                        </div>
+                        </div> -->
                     </div>
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">

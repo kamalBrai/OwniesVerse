@@ -1,71 +1,345 @@
 {% extends 'profile_dashboard.html' %}
 {% load static %}
 
-{% block title %}My Profile{% endblock %}
-{% block page_title %}Profile{% endblock %}
-{% block page_subtitle %}Manage your account information{% endblock %}
+{% block title %}My Orders{% endblock %}
+{% block page_title %}My Orders{% endblock %}
+{% block page_subtitle %}Track and manage your orders{% endblock %}
 
 {% block maincontent %}
 
-<h1 class="text-center alert alert-info">My Order List</h1>
+<style>
+    :root {
+        --primary-color: #0d1b2a;
+        --accent-color: #00d4ff;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+    }
+
+    .orders-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
+        color: white;
+        padding: 25px 30px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .orders-header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .orders-header .accent {
+        color: var(--accent-color);
+    }
+
+    .orders-table-container {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .table-modern {
+        width: 100%;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-modern thead {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a5f 100%);
+    }
+
+    .table-modern thead th {
+        color: white;
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 18px 15px;
+        border: none;
+        text-align: left;
+    }
+
+    .table-modern thead th:first-child {
+        padding-left: 25px;
+    }
+
+    .table-modern tbody tr {
+        border-bottom: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+    }
+
+    .table-modern tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .table-modern tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .table-modern tbody td {
+        padding: 20px 15px;
+        vertical-align: middle;
+        color: #374151;
+        font-size: 14px;
+    }
+
+    .table-modern tbody td:first-child {
+        padding-left: 25px;
+        font-weight: 600;
+        color: var(--accent-color);
+    }
+
+    .product-cell {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .price-cell {
+        font-weight: 600;
+        color: var(--accent-color);
+    }
+
+    .total-cell {
+        font-weight: 700;
+        color: var(--primary-color);
+        font-size: 15px;
+    }
+
+    .product-image {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .address-cell {
+        max-width: 200px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .status-paid {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 6px 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-unpaid {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 6px 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .transaction-box {
+        background: #ecfdf5;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 8px;
+        border-left: 3px solid var(--success-color);
+        font-size: 12px;
+    }
+
+    .transaction-box strong {
+        color: #065f46;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .transaction-box div {
+        color: #047857;
+        margin-bottom: 2px;
+    }
+
+    .btn-pay {
+        background: linear-gradient(135deg, #5c2d91 0%, #7c3aed 100%);
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 3px 10px rgba(124,58,237,0.3);
+    }
+
+    .btn-pay:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(124,58,237,0.4);
+        color: white;
+    }
+
+
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state i {
+        font-size: 80px;
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: var(--primary-color);
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: #6b7280;
+        margin-bottom: 25px;
+    }
+
+    .btn-shop {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #0099cc 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+
+    .btn-shop:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,212,255,0.4);
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .table-modern {
+            font-size: 13px;
+        }
+        
+        .address-cell {
+            max-width: 150px;
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .orders-table-container {
+            overflow-x: auto;
+        }
+
+        .table-modern {
+            min-width: 1000px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .orders-header {
+            padding: 20px;
+        }
+
+        .orders-header h1 {
+            font-size: 20px;
+        }
+    }
+</style>
 
 <div class="container">
-    <div class="row">
-        <div class="col alert alert-success">
-            <table class="table table-success table-striped">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">product</th>
-      <th scope="col">quantity</th>
-      <th scope="col">price</th>
-      <th scope="col">Total</th>
-    <th scope="col">image</th>
-      <th scope="col">Address</th>
-      <th scope="col">Phone</th>
-      <th scope="col">status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for order in myorder %}
-      
-   
-    <tr>
-      <th scope="row">{{order.id}}</th>
-      <td>{{order.product}}</td>
-      <td>{{order.quantity}}</td>
-      <td>{{order.price}}</td>
-      <td>{{order.total}}</td>
-      <td><img src="{{order.image}}" height="100px" width="100px" alt=""></td>
-      <td>{{order.address}}</td>
-      <td>{{order.phone}}</td>
-      <td>
-        {% if order.is_pay %}
-        <button class="btn btn-sm btn-success">Paid</button>
+    <div class="orders-header">
+        <h1><span class="accent">My</span> Order List</h1>
+    </div>
 
-        {% with order.transaction_set.first as txn %}
-        <div class="my-2 p-2 border bg-light rounded">
-            <strong>TXN Id</strong>{{txn.transaction_id}}
-            <strong>Amount</strong>{{txn.total}}
-            <strong>Payment date</strong>{{txn.payment_date}}
-        </div>
-          
-        {% endwith %}
+    <div class="orders-table-container">
+        {% if myorder %}
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Image</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in myorder %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td class="product-cell">{{ order.product }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td class="price-cell">Rs. {{ order.price }}</td>
+                    <td class="total-cell">Rs. {{ order.total }}</td>
+                    <td>
+                        <img src="{{ order.image }}" alt="{{ order.product }}" class="product-image">
+                    </td>
+                    <td class="address-cell">{{ order.address }}</td>
+                    <td>{{ order.phone }}</td>
+                    <td>
+                        {% if order.is_pay %}
+                            <span class="status-paid">
+                                <i class="fas fa-check-circle"></i> Paid
+                            </span>
+                            {% with order.transaction_set.first as txn %}
+                            <div class="transaction-box">
+                                <strong>Transaction Details</strong>
+                                <div><strong>ID:</strong> {{ txn.transaction_id }}</div>
+                                <div><strong>Amount:</strong> Rs. {{ txn.total }}</div>
+                                <div><strong>Date:</strong> {{ txn.payment_date|date:"M d, Y" }}</div>
+                            </div>
+                            {% endwith %}
+                        {% else %}
+                            <span class="status-unpaid">
+                                <i class="fas fa-clock"></i> Pending
+                            </span>
+                            <div style="margin-top: 8px;">
+                                <a href="{% url 'initkhalti' order.id %}" class="btn-pay">
+                                    <i class="fas fa-wallet"></i> Pay with Khalti
+                                </a>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
-        <a href="{% url 'initkhalti' order.id %}">
-        <button class="btn btn-sm btn-warning" >Pay with khalti</button>
-          </a>
-        {% endif %}
-      </td>
-     
-    </tr>
-     {% endfor %}
-  
-  </tbody>
-</table>
-
+        <div class="empty-state">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>No Orders Yet</h3>
+            <p>You haven't placed any orders. Start shopping now!</p>
+            <a href="{% url 'index' %}" class="btn-shop">
+                <i class="fas fa-shopping-cart"></i> Start Shopping
+            </a>
         </div>
+        {% endif %}
     </div>
 </div>
+
+
 
 {% endblock maincontent %}
